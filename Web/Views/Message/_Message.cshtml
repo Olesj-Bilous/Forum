@@ -1,0 +1,70 @@
+﻿@using Data.Entities
+@{
+    Message message = ViewBag.Message;
+    Post post = message is Post ? (Post)message : null;
+}
+<div class="card @((ViewBag.PostView || ViewBag.NewView) && message is Post ? "bg-primary" : "bg-secondary") mt-1">
+    <div class="card-header d-flex">
+        @if (message is Post)
+        {
+            <h3 class="text-light">
+                @if (!ViewBag.PostView)
+                {
+                    <a class="a-muted text-light" asp-action="Poste" asp-route-id="@post.Id">@post.Title</a>
+                }
+                else
+                {
+                    @post.Title
+                }
+                
+                <span class="small text-dark">
+                    by
+
+                    <a class="a-muted text-dark" asp-action="Author" asp-route-id="@post.AuthorId">
+                        @post.Author.Name
+                    </a>
+                </span>
+            </h3>
+            
+            @if (ViewBag.PostView || ViewBag.NewView)
+            {
+                <a class="btn btn-secondary ms-auto" asp-action="Topic" asp-route-id="@post.TopicId">
+                    @post.Topic.Name
+                </a>
+            }
+        }
+        else
+        {
+            <a class="a-muted text-dark" asp-action="Author" asp-route-id="@message.AuthorId">
+                @message.Author.Name
+            </a>
+        }
+    </div>
+
+    <div class="card-body">
+        <div class="card-text rel-mx-1">@message.Text</div>
+    </div>
+
+    <div class="card-footer d-flex align-items-end">
+        <div class="d-flex">
+            <div class="me-2"><span class="fa-solid fa-thumbs-up"></span></div>
+            <div>@message.RateSum</div>
+            <div class="ms-2"><span class="fa-solid fa-thumbs-down"></span></div>
+        </div>
+        
+        
+        <div class="ms-auto d-flex align-items-end">
+            @if ((message is Reply && !ViewBag.NewView) || ViewBag.PostView)
+            {
+                <a asp-action="NewReply" asp-route-id="@message.Id">
+                    <div>
+                    <span class="fa-solid fa-message text-light text-large"></span></div>
+                </a>
+            }
+            @if (message is Post)
+            {
+                <span class="ms-2">@post.Replies.Count replies</span>
+            }
+        </div>
+    </div>
+</div>

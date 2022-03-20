@@ -1,0 +1,43 @@
+﻿@model NewViewModel
+@{
+    ViewBag.Title = "New post";
+}
+
+@if (Model.Source is not null)
+{
+    ViewBag.Message = Model.Source;
+    ViewBag.PostView = false;
+    ViewBag.NewView = true;
+    <partial name="_Message" view-data="ViewData"/>
+}
+else
+{
+    <div class="rounded bg-primary px-3 py-2 mb-1 d-flex">
+        <h2 class="text-light mb-1">
+            @Model.Topic.Name
+            <span class="small">@Model.Topic.Description</span>
+        </h2>
+    </div>
+}
+
+<form asp-action="@(Model.Source is null ? "NewPost" : "NewReply")" method="post">
+    <input type="hidden" asp-for="TopicId" value="@Model.TopicId"/>
+    <input type="hidden" asp-for="SourceId" value="@Model.SourceId"/>
+    <div class="mt-1">
+        @if (Model.Source is null)
+        {
+            <div class="mb-1">
+                <label class="control-label text-dark" asp-for="Title"></label>
+                <input class="form-control text-dark border-light" asp-for="Title" />
+            </div>
+        }
+        <div class="mb-2">
+            <label class="control-label text-dark" asp-for="Text"></label>
+            <textarea class="form-control text-dark border-light" asp-for="Text" rows="7"></textarea>
+        </div>
+        <input class="btn btn-primary text-light text-large" type="submit" value="Post" />
+        <a asp-action="Topic" asp-route-id="@Model.TopicId" class="btn btn-primary text-light text-large ms-1">
+            Cancel
+        </a>
+    </div>
+</form>

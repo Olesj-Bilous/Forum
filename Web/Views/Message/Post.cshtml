@@ -1,0 +1,33 @@
+﻿@using Data.Entities
+@model PostViewModel
+@{
+    ViewBag.Title = Model.Post.Title;
+    ViewBag.PostView = true;
+    ViewBag.NewView = false;
+
+    //An iterative implementation with a stack would greatly complicate nesting divs
+    //or other methods this developer could presently conceive to adjust margin according to depth.
+    //Considering alternative implementations as the dataset grows is recommended.
+    async Task TraverseDepthFirst(Reply root)
+    {
+        ViewBag.Message = root;
+        <partial name="_Message" view-data="ViewData" />
+
+        <div class="ms-1">
+            @foreach (var reply in root.Replies)
+            {
+                await TraverseDepthFirst(reply);
+            }
+        </div>
+    }
+
+    ViewBag.Message = Model.Post;
+    <partial name="_Message" view-data="ViewData" />
+}
+
+<div class="mb-5 mx-1">
+    @foreach (var reply in Model.Replies)
+    {
+        await TraverseDepthFirst(reply);
+    }
+</div>

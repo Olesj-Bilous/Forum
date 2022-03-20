@@ -1,0 +1,25 @@
+﻿@using Web.Models
+@model TopicsViewModel
+@{
+    ViewBag.Title = "Topics";
+    ViewBag.PostView = false;
+    ViewBag.NewView = false;
+
+    foreach (var post in Model.MainPostsByTopic)
+    {
+        <div class="card bg-primary mt-1">
+            <div class="card-header">
+                <h2 class="text-light">
+                    <a class="a-muted text-light" asp-action="Topic" asp-route-id="@post.TopicId">@post.Topic.Name</a>
+                    <span class="small">@post.Topic.Description</span>
+                </h2>
+            </div>
+            <div class="card-body">
+                @{
+                    ViewBag.Message = post;
+                }
+                <partial name="_Message" view-data="ViewData"/>
+            </div>
+        </div>
+    }
+}
