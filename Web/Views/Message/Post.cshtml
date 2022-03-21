@@ -5,20 +5,48 @@
     ViewBag.PostView = true;
     ViewBag.NewView = false;
 
-    //An iterative implementation with a stack would greatly complicate nesting divs
-    //or other methods this developer could presently conceive to adjust margin according to depth.
-    //Considering alternative implementations as the dataset grows is recommended.
+    //An iterative implementation with a stack
     async Task TraverseDepthFirst(Reply root)
     {
-        ViewBag.Message = root;
-        <partial name="_Message" view-data="ViewData" />
+        Stack<Reply> replies = new();
+        Stack<int> childCounts = new();
 
-        <div class="ms-1">
-            @foreach (var reply in root.Replies)
+        replies.Push(root);
+
+        while (replies.Any())
+        {
+            var source = replies.Pop();
+
+            //margin is set according to the current depth of the tree,
+            //which is the amount of replies with discovered children, which is the amount of childCounts
+            ViewBag.Message = source;
+            <div style="margin-left:@(childCounts.Count*5)px">
+                <partial name="_Message" view-data="ViewData" />
+            </div>
+
+            //source is root at the first iteration, so there are no childCounts
+            if (childCounts.Any())
             {
-                await TraverseDepthFirst(reply);
+                //a child is removed from the count, since it was displayed earlier in the iteration
+                var childCount = childCounts.Pop() - 1;
+                //if it was not the last child, childCount is pushed back to the stack
+                if (childCount > 0)
+                {
+                    childCounts.Push(childCount);
+                }
             }
-        </div>
+
+            if (source.Replies.Any())
+            {
+                //children of source are added to the reply stack
+                @foreach (var reply in source.Replies)
+                {
+                    replies.Push(reply);
+                }
+                //a count of source's children is added to the count stack
+                childCounts.Push(source.Replies.Count);
+            }
+        }
     }
 
     ViewBag.Message = Model.Post;
