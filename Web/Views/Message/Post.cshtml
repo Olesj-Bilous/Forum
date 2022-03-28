@@ -4,7 +4,27 @@
     ViewBag.Title = Model.Post.Title;
     ViewBag.PostView = true;
     ViewBag.NewView = false;
+    ViewBag.Message = Model.Post;
+}
 
+<div class="post">
+    @* main post *@
+    <partial name="_Message" view-data="ViewData"/>
+
+    <div class="post-footer">
+        @* replies *@
+        @foreach (var reply in Model.Replies)
+        {
+            <div class="mt-1">
+                @{
+                    await DisplayDepthFirst(reply);
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@{
     //Replies are displayed depth first, with indentation representative of depth
     //Depth-first search is implemented iteratively with a stack
     //to avoid the tail call overhead of a recursive solution
@@ -19,10 +39,10 @@
         {
             var source = replies.Pop();
 
-            //margin is set according to the current depth of the tree,
-            //which is the amount of replies with discovered children, which is the amount of childCounts
+            //margin is set according to the current depth of tree traversal,
+            //which is the amount of replies with discovered children that remain to be finished, which is the amount of childCounts
             ViewBag.Message = source;
-            <div style="margin-left:@( childCounts.Count * 5 )px">
+            <div class="reply mb-1" style="margin-left:@( childCounts.Count * 8 )px">
                 <partial name="_Message" view-data="ViewData" />
             </div>
 
@@ -41,25 +61,15 @@
 
             if (source.Replies.Any())
             {
-                //the children of source are added to the reply stack
+                //the children of source are pushed to the reply stack
                 @foreach (var reply in source.Replies)
                 {
                     replies.Push(reply);
                 }
 
-                //a count of source's children is added to the count stack
+                //a count of source's children is pushed to the count stack
                 childCounts.Push(source.Replies.Count);
             }
         }
     }
-
-    ViewBag.Message = Model.Post;
 }
-<partial name="_Message" view-data="ViewData" />
-
-<div class="mb-5 mx-1">
-    @foreach (var reply in Model.Replies)
-    {
-        await DisplayDepthFirst(reply);
-    }
-</div>

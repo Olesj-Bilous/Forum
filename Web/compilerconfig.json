@@ -1,6 +1,6 @@
 ﻿[
   {
     "outputFile": "wwwroot/lib/bootstrap/css/my-bootstrap.css",
-    "inputFile": "wwwroot/scss/bootstrap/bootstrap-overrides.scss"
+    "inputFile": "wwwroot/privateLib/scss/bootstrap/bootstrap-overrides.scss"
   }
 ]

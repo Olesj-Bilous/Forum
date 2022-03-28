@@ -2,23 +2,20 @@
 @model TopicsViewModel
 @{
     ViewBag.Title = "Topics";
+    ViewBag.TopicsView = true;
     ViewBag.PostView = false;
     ViewBag.NewView = false;
 
     foreach (var post in Model.MainPostsByTopic)
     {
-        <div class="card bg-primary mt-1">
-            <div class="card-header">
-                <h2 class="text-light">
-                    <a class="a-muted text-light" asp-action="Topic" asp-route-id="@post.TopicId">@post.Topic.Name</a>
-                    <span class="small">@post.Topic.Description</span>
-                </h2>
-            </div>
-            <div class="card-body">
-                @{
-                    ViewBag.Message = post;
-                }
-                <partial name="_Message" view-data="ViewData"/>
+        ViewBag.Topic = post.Topic;
+        ViewBag.Message = post;
+        <div class="topic mb-1">
+            <partial name="_TopicHeader" view-data="ViewData"/>
+            <div class="topic-body">
+                <div class="post mb-1">
+                    <partial name="_Message" view-data="ViewData"/>
+                </div>
             </div>
         </div>
     }

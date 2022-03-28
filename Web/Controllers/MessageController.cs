@@ -120,8 +120,13 @@ namespace Web.Controllers
             }
             else
             {
-                var entry = _context.Entry(source);
+                var reply = (Reply)source;
+                var entry = _context.Entry(reply);
                 entry.Reference(x => x.Author).Load();
+                entry.Reference(x => x.Post).Load();
+                var postEntry = _context.Entry(reply.Post);
+                postEntry.Reference(x => x.Author).Load();
+                postEntry.Reference(x => x.Topic).Load();
             }
             model.Source = source;
             return View("New", model);

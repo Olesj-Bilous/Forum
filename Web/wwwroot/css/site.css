@@ -1,4 +1,9 @@
+/*header*/
+.navbar {
+    background-color: #111111;
+}
 
+/*font-size*/
 
 .text-xx-large{
     font-size: xx-large;
@@ -12,9 +17,8 @@
     font-size: large;
 }
 
-.post-title > .post-subtitle {
-    font-size: medium;
-}
+
+/*relative padding/margin*/
 
 @media screen and (min-width:992px) {
     .rel-px-lg-3 {
@@ -23,24 +27,86 @@
     }
 }
 
-
 .rel-mx-1 {
     margin-left: 5%;
     margin-right: 5%;
 }
 
+
+/*links*/
+.btn {
+    background-color: var(--bs-secondary);
+    color: var(--bs-color);
+}
+
+.btn:hover, .btn:focus {
+    background-color: var(--bs-primary);
+}
+
 .a-muted {
+    text-decoration: none;
+    color: var(--bs-dark);
+}
+
+.link-icon {
+    color: var(--bs-dark);
     text-decoration: none;
 }
 
-.a-muted:hover {
-    text-decoration: underline;
+.small {
+    color: #787878;
 }
 
-.fa-solid:hover, .fa-solid:focus {
-    color: var(--bs-dark);
+.link-icon:hover, .link-icon:focus,
+.a-muted:hover, .a-muted:focus {
+    color: var(--bs-light) !important;
     cursor: pointer;
 }
+
+/*.small > .a-muted:hover, .small > .a-muted:focus*//*,
+h5 > .a-muted*/ /*{
+    color: var(--bs-primary) !important;
+}*/
+
+/*h5 > .a-muted:hover, h5 > .a-muted:focus{
+    color: var(--bs-dark) !important;
+}*/
+
+/*msg*/
+.post, .topic {
+    border-radius: 14px;
+    background-color: #111111;
+}
+
+.reply {
+    border-radius: 0 8px 8px;
+}
+
+.topic-body > .post {
+    border-radius: 8px;
+}
+
+.reply, .topic-body > .post {
+    background-color: #222222;
+}
+
+.reply > .msg-label, .topic-label, .topic > .post > .msg-label {
+    padding: 0.3em 0.7em;
+}
+
+.post > .msg-label {
+    padding: 0.5em 0.7em 0.3em 0.7em;
+}
+
+.msg-body, .topic-body, .post-footer {
+    padding: 0.2em 0.7em;
+}
+
+.post-footer {
+    border-radius: 0 0 11px 11px;
+}
+
+/*other*/
 
 html {
   font-size: 14px;
@@ -59,6 +125,4 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color: black !important;
-    color: #e2dbec !important;
 }

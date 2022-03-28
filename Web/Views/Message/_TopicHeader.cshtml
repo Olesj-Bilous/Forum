@@ -1,0 +1,36 @@
+﻿@{
+    var topic = ViewBag.Topic;
+}
+
+<div class="topic-label d-flex align-items-end">
+    <h3 class="mb-1">
+        @if (ViewBag.TopicsView || ViewBag.NewView)
+        {
+            <a class="a-muted" asp-action="Topic" asp-route-id="@topic.Id">@topic.Name</a>
+        }
+        else
+        {
+            @topic.Name;
+        }
+
+
+        <span class="small">
+            @topic.Description
+        </span>
+    </h3>
+
+    <div class="ms-auto text-x-large">
+        @if (!ViewBag.NewView)
+        {
+            <a class="a-muted" asp-action="NewPost" asp-route-id="@topic.Id">
+                <span class="link-icon fa-solid fa-message"></span>
+            </a>
+        }
+        @if (!ViewBag.TopicsView)
+        {
+            <a class="a-muted ms-2" asp-action="Topics">
+                <span class="link-icon fa-solid fa-angle-double-up"></span>
+            </a>
+        }
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.Models
 {
@@ -9,6 +10,7 @@ namespace Web.Models
         public int SourceId { get; set; }
         public Message Source { get; set; }
         public string Title { get; set; }
+        [DataType(DataType.MultilineText)]
         public string Text { get; set; }
     }
 }

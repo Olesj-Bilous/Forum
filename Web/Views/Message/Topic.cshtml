@@ -2,24 +2,20 @@
 @model TopicViewModel
 @{
     ViewBag.Title = Model.Topic.Name;
+    ViewBag.Topic = Model.Topic;
+    ViewBag.TopicsView = false;
     ViewBag.PostView = false;
     ViewBag.NewView = false;
 }
-
-<div class="rounded bg-primary px-3 py-2 mb-1 d-flex align-items-center">
-    <h2 class="text-light mb-1">
-        @Model.Topic.Name
-        <span class="small">@Model.Topic.Description</span>
-    </h2>
-    <a asp-action="NewPost" asp-route-id="@Model.Topic.Id" class="ms-auto">
-        <span class="fa-solid fa-message text-light text-xx-large"></span>
-    </a>
-</div>
-
-<div>
-    @foreach (Post post in Model.Topic.Posts.OrderByDescending(x => x.RateSum))
-    {
-        ViewBag.Message = post;
-        <partial name="_Message" view-data="ViewData" />
-    }
+<div class="topic mb-1">
+    <partial name="_TopicHeader" view-data="ViewData"/>
+    <div class="topic-body">
+        @foreach (Post post in Model.Topic.Posts.OrderByDescending(x => x.RateSum))
+        {
+            ViewBag.Message = post;
+            <div class="post mb-1">
+                <partial name="_Message" view-data="ViewData" />
+            </div>
+        }
+    </div>
 </div>
