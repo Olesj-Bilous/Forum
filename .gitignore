@@ -2,8 +2,9 @@
 
 Data/Migrations
 Web/wwwroot/privateLib
+Web/wwwroot/lib/bootstrap/css/my-bootstrap.css
 Web/compilerconfig.json
-# Web/compilerconfig.json.defaults
+Web/compilerconfig.json.defaults
 Web/GlobalSuppressions.cs
 Web/libman.json
 
