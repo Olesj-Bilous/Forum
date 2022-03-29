@@ -43,14 +43,9 @@
     background-color: var(--bs-primary);
 }
 
-.a-muted {
+.a-muted, .link-icon {
     text-decoration: none;
     color: var(--bs-dark);
-}
-
-.link-icon {
-    color: var(--bs-dark);
-    text-decoration: none;
 }
 
 .small {
@@ -73,32 +68,32 @@ h5 > .a-muted*/ /*{
 }*/
 
 /*msg*/
-.post, .topic {
+.topic, .post {
     border-radius: 14px;
     background-color: #111111;
-}
-
-.reply {
-    border-radius: 0 8px 8px;
 }
 
 .topic-body > .post {
     border-radius: 8px;
 }
 
-.reply, .topic-body > .post {
-    background-color: #222222;
+.reply {
+    border-radius: 0 8px 8px;
 }
 
-.reply > .msg-label, .topic-label, .topic > .post > .msg-label {
-    padding: 0.3em 0.7em;
+.topic-body > .post, .reply {
+    background-color: #222222;
 }
 
 .post > .msg-label {
     padding: 0.5em 0.7em 0.3em 0.7em;
 }
 
-.msg-body, .topic-body, .post-footer {
+.topic-label, .topic > .post > .msg-label, .reply > .msg-label {
+    padding: 0.3em 0.7em;
+}
+
+.topic-body, .msg-body, .post-footer {
     padding: 0.2em 0.7em;
 }
 
