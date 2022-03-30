@@ -1,5 +1,7 @@
-﻿using Data.Repositories;
+﻿using Data.Entities;
+using Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Web.Extensions;
 using Web.Models;
 
 namespace Web.Controllers
@@ -20,12 +22,31 @@ namespace Web.Controllers
             return View(new SignInViewModel());
         }
 
-        [HttpPost] IActionResult SignIn(SignInViewModel model)
+        [HttpPost]
+        public IActionResult SignIn(SignInViewModel model)
         {
             if (ModelState.IsValid)
             {
-
-                return RedirectToAction("Topics", "Message");
+                var user = _context.Users.FirstOrDefault(x => x.Name == model.Username);
+                
+                if (user is not null)
+                {
+                    if (user.Password == model.Password)
+                    {
+                        HttpContext.Session.SetObject("User", user);
+                        return RedirectToAction("Topics", "Message");
+                    }
+                    else
+                    {
+                        model.WrongPassword = true;
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    model.UserNotFound = true;
+                    return View(model);
+                }
             }
             else
             {

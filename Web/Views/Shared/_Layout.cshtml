@@ -11,27 +11,38 @@
 </head>
 <body>
     <header>
-        <nav class="navbar box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark box-shadow mb-3">
             <div class="container-fluid">
-                <h3>
-                    <a class="navbar-brand" asp-area="" asp-controller="Message" asp-action="Topics">
-                        Forum
-                    </a>
-                </h3>
+                <a class="navbar-brand a-muted" asp-controller="Message" asp-action="Topics">
+                    <span class="fa-solid fa-comments me-2"></span>
+                    Forum
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                <div class="d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="a-muted" asp-area="" asp-controller="Message" asp-action="Topics">Topics</a>
-                        </li>
-                    </ul>
+                <div class="navCollapse collapse navbar-collapse" aria-expanded="false" aria-controls="navCollapse">
+                    <div class="navbar-nav">
+                        <div class="nav-item">
+                            <a class="nav-link a-muted" asp-controller="Message" asp-action="Topics">
+                                Topics
+                            </a>
+                        </div>
+                    </div>
+                 </div>
+
+                 <div class="navCollapse collapse navbar-collapse pull-right flex-row-reverse">
+                    <div class="navbar-nav">
+                        @await Component.InvokeAsync("AccountPane")
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
     <div class="container">
-        <main role="main" class="rel-px-lg-3 pb-3">
+        <main role="main" class="">
             @RenderBody()
         </main>
     </div>
@@ -41,7 +52,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

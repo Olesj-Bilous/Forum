@@ -19,19 +19,67 @@
 
 
 /*relative padding/margin*/
+.topic, main > .post, .form-pane {
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+}
 
-@media screen and (min-width:992px) {
-    .rel-px-lg-3 {
-        padding-left: 12.5%;
-        padding-right: 12.5%;
+.form-pane{
+    padding: 0.5rem 1rem;
+}
+
+@media (min-width:576px) {
+    .topic, main > .post, .form-pane {
+        margin-left: 1.5rem;
+        margin-right: 1.5em;
     }
 }
 
-.rel-mx-1 {
-    margin-left: 5%;
-    margin-right: 5%;
+@media (min-width:768px) {
+    .topic, main > .post, .form-pane {
+        margin-left: 5rem;
+        margin-right: 5rem;
+    }
+
+    .form-pane {
+        padding: 0.75rem 1.25rem;
+    }
 }
 
+@media (min-width:992px) {
+    .topic, main > .post, .form-pane {
+        margin-left: 10rem;
+        margin-right: 10rem;
+    }
+
+    .form-pane {
+        padding: 1rem 1.5rem;
+    }
+}
+
+@media (min-width:1200px) {
+    .topic, main > .post, .form-pane {
+        margin-left: 15rem;
+        margin-right: 15rem;
+    }
+
+    .form-pane {
+        padding-left: 1.75rem;
+        padding-right: 1.75rem;
+    }
+}
+
+@media (min-width:1400px) {
+    .topic, main > .post, .form-pane {
+        margin-left: 20rem;
+        margin-right: 20rem;
+    }
+
+    .form-pane {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
 
 /*links*/
 .btn {
@@ -68,7 +116,7 @@ h5 > .a-muted*/ /*{
 }*/
 
 /*msg*/
-.topic, .post {
+.topic, main > .post, .form-pane {
     border-radius: 14px;
     background-color: #111111;
 }

@@ -10,6 +10,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddRepository(builder.Configuration.GetConnectionString("Forum"));
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -17,6 +20,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+app.UseSession();
+
 app.UseStaticFiles();
 
 app.UseRouting();

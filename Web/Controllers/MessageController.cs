@@ -3,6 +3,7 @@ using Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Web.Extensions;
 using Web.Models;
 
 namespace Web.Controllers
@@ -20,25 +21,34 @@ namespace Web.Controllers
 
         public IActionResult Topics()
         {
-            TopicsViewModel model = new();
+            var user = HttpContext.Session.GetObject<User>("User");
 
-            //load posts with tracking because groupby needs
-            //identity resolution to distinguish post topics
-            IEnumerable<Post> posts = _context.Posts
-                .Include(x => x.Replies)
-                .Include(x => x.Topic)
-                .Include(x => x.Author);
+            if (user is not null)
+            {
+                TopicsViewModel model = new();
 
-            model.MainPostsByTopic = posts
-                .GroupBy(
-                    //group posts by topic
-                    x => x.Topic,
-                    //extract maximum rated post from each topic
-                    (topic, groupedPosts) => groupedPosts.MaxBy(y => y.RateSum))
-                //order pairs of topics and posts by post rating
-                .OrderByDescending(x => x.RateSum);
+                //load posts with tracking because groupby needs
+                //identity resolution to distinguish post topics
+                IEnumerable<Post> posts = _context.Posts
+                    .Include(x => x.Replies)
+                    .Include(x => x.Topic)
+                    .Include(x => x.Author);
 
-            return View(model);
+                model.MainPostsByTopic = posts
+                    .GroupBy(
+                        //group posts by topic
+                        x => x.Topic,
+                        //extract maximum rated post from each topic
+                        (topic, groupedPosts) => groupedPosts.MaxBy(y => y.RateSum))
+                    //order pairs of topics and posts by post rating
+                    .OrderByDescending(x => x.RateSum);
+
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
         }
 
         public IActionResult Topic(int id)
