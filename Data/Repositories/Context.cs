@@ -11,6 +11,7 @@ namespace Data.Repositories
 {
     public class Context : DbContext
     {
+        public Context() { }
         public Context(DbContextOptions<Context> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
@@ -19,6 +20,14 @@ namespace Data.Repositories
         public DbSet<Post> Posts { get; set; }
         public DbSet<Reply> Replies { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=localhost;Database=Forum;Trusted_Connection=True;MultipleActiveResultSets=true");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
