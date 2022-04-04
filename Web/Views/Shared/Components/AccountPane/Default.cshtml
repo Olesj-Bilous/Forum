@@ -3,14 +3,14 @@
 @if (Model is not null)
 {
     <div class="nav-item me-3">
-        <a class="nav-link a-muted" asp-controller="Account" asp-action="Index" asp-route-id="@Model.Id">
+        <a class="nav-link a-muted" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id">
             <span class="fa-solid fa-user me-2"></span>
             @Model.Name
         </a>
     </div>
 
     <div class="nav-item">
-        <a class="nav-link a-muted" asp-controller="Account" asp-action="SignOut">
+        <a class="nav-link a-muted" asp-controller="Account" asp-action="ForumSignOut">
             <span class="fa-solid fa-sign-out me-2"></span>
             Sign out
         </a>
