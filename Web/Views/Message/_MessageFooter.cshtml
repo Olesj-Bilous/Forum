@@ -4,12 +4,8 @@
 }
 
 <div class="msg-label d-flex align-items-end">
-    <div class="d-flex">
-        <a class="a-muted me-2"><span class="link-icon fa-solid fa-thumbs-up"></span></a>
-        <div>@message.RateSum</div>
-        <a class="a-muted ms-2"><span class="link-icon fa-solid fa-thumbs-down"></span></a>
-    </div>
-        
+    @await Component.InvokeAsync("RatingPane", message)
+
     <div class="ms-auto d-flex align-items-end">
         @if (message is Post)
         {

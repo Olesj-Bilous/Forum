@@ -8,7 +8,7 @@
 }
 
 <div class="post">
-    @* main post *@
+    @* post *@
     <partial name="_Message" view-data="ViewData"/>
 
     <div class="post-footer">
@@ -25,12 +25,17 @@
 </div>
 
 @{
-    //Replies are displayed depth first, with indentation representative of depth
-    //Depth-first search is implemented iteratively with a stack
-    //to avoid the tail call overhead of a recursive solution
+    // Replies are displayed depth first, with:
+    // - indentation representative of depth
+    // - nested divs to control collapsing of replies
+    //
+    // Depth-first search is implemented iteratively with a stack
+    // to avoid the tail call overhead of a recursive solution
     async Task DisplayDepthFirst(Reply root)
     {
         Stack<Reply> replies = new();
+
+        // a count of discovered yet unfinished child replies is kept for each reply
         Stack<int> childCounts = new();
 
         replies.Push(root);
@@ -39,36 +44,57 @@
         {
             var source = replies.Pop();
 
-            //margin is set according to the current depth of tree traversal,
-            //which is the amount of replies with discovered children that remain to be finished, which is the amount of childCounts
+            // source is sent to message partial view for display
             ViewBag.Message = source;
-            <div class="reply mb-1" style="margin-left:@( childCounts.Count * 8 )px">
+            <div class="reply mb-1">
                 <partial name="_Message" view-data="ViewData" />
             </div>
-
-            //source is root at the first iteration, so there are no childCounts
-            if (childCounts.Any())
+            
+            var childCount = source.Replies.Count;
+            if (childCount > 0)
             {
-                //a child is removed from the count, since it was displayed earlier in the iteration
-                var childCount = childCounts.Pop() - 1;
+                // a count of source's children is pushed to the count stack
+                childCounts.Push(childCount);
 
-                //if it was not the last child, childCount is pushed back to the stack
-                if (childCount > 0)
-                {
-                    childCounts.Push(childCount);
-                }
-            }
+                // a container is opened for its children
+                @:<div class="ms-3 mb-1">
 
-            if (source.Replies.Any())
-            {
-                //the children of source are pushed to the reply stack
+                // the children of source are pushed to the reply stack
                 @foreach (var reply in source.Replies)
                 {
                     replies.Push(reply);
                 }
+            }
+            else
+            {
+                if (childCounts.Any())
+                {
+                    // decrement parent count
+                    var parentCount = childCounts.Peek() - 1;
 
-                //a count of source's children is pushed to the count stack
-                childCounts.Push(source.Replies.Count);
+                    // pop zero counts and decrement parent counts
+                    // until we reach an ancestor count larger than zero after decrementing
+                    while (parentCount < 1)
+                    {
+                        // pop the count
+                        childCounts.Pop();
+
+                        // close children container
+                        @:</div>
+
+                        // pass decremented grandparent count to while loop, if any, else break loop
+                        if (childCounts.Any())
+                            parentCount = childCounts.Peek() - 1;
+                        else
+                            break;
+                    }
+                    // pop and push back count larger than zero after decrementing, if any
+                    if (childCounts.Any())
+                    {
+                        childCounts.Pop();
+                        childCounts.Push(parentCount);
+                    }
+                }
             }
         }
     }

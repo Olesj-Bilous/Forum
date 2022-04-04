@@ -1,0 +1,36 @@
+﻿@using Data.Entities
+@model NewPostViewModel
+@{
+    ViewBag.Title = "New post";
+    ViewBag.Topic = Model.Topic;
+    ViewBag.NewView = true;
+    ViewBag.PostView = false;
+    ViewBag.TopicsView = false;
+}
+
+<div class="topic">
+    <partial name="_TopicHeader" view-data="ViewData"/>
+
+    <div class="topic-body">
+            <form asp-action="NewPost" method="post">
+        <div class="post" mb-1">
+                <input type="hidden" asp-for="TopicId" value="@Model.TopicId"/>
+
+                <div class="msg-label">
+                    <input class="form-control" asp-for="Title" placeholder="A title" />
+                    <span class="form-label text-danger" asp-validation-for="Title"></span>
+                </div>
+                    
+                <div class="msg-body">
+                    <textarea class="form-control" asp-for="Text" rows="7" placeholder="Your idea"></textarea>
+                    <span class="form-label text-danger" asp-validation-for="Text"></span>
+                </div>
+                    
+                <div class="msg-label">
+                    <input class="btn text-large" type="submit" value="Post" />
+                    <a class="btn text-large ms-2" asp-action="Topic" asp-route-id="@Model.TopicId">Cancel</a>
+                </div>
+        </div>
+            </form>
+    </div>
+</div>

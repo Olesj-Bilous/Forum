@@ -8,7 +8,7 @@ using Web.Models;
 
 namespace Web.Controllers
 {
-    public class MessageController : Controller
+    public partial class MessageController : Controller
     {
         private readonly ILogger<MessageController> _logger;
         private readonly Context _context;
@@ -38,9 +38,11 @@ namespace Web.Controllers
                     .GroupBy(
                         //group posts by topic
                         x => x.Topic,
+
                         //extract maximum rated post from each topic
                         (topic, groupedPosts) => groupedPosts.MaxBy(y => y.RateSum))
-                    //order pairs of topics and posts by post rating
+
+                    //order posts by rating
                     .OrderByDescending(x => x.RateSum);
 
                 return View(model);
@@ -78,99 +80,6 @@ namespace Web.Controllers
 
             model.Replies = model.Post.Replies.Where(x => x.Source is null);
 
-            return View(model);
-        }
-
-        public IActionResult NewPost(int id)
-        {
-            NewViewModel model = new();
-            model.TopicId = id;
-            model.Topic = _context.Topics.Find(id);
-            return View("New", model);
-        }
-
-        [HttpPost]
-        public IActionResult NewPost(NewViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                //try
-                //{
-                    Post post = new();
-                    post.AuthorId = 1;
-                    post.TopicId = model.TopicId;
-                    post.Title = model.Title;
-                    post.Text = model.Text;
-                    _context.Posts.Add(post);
-                    _context.SaveChanges();
-                    return RedirectToAction("Topic", new { id = model.TopicId });
-                //}
-                //catch
-                //{
-                //    return Error();
-                //}
-            }
-            else
-            {
-                return View("New", model);
-            }
-        }
-
-        public IActionResult NewReply(int id)
-        {
-            NewViewModel model = new();
-            model.SourceId = id;
-            var source = _context.Messages.Find(id);
-            if (source is Post)
-            {
-                var entry = _context.Entry((Post)source);
-                entry.Reference(x => x.Author).Load();
-                entry.Reference(x => x.Topic).Load();
-                entry.Collection(x => x.Replies).Load();
-            }
-            else
-            {
-                var reply = (Reply)source;
-                var entry = _context.Entry(reply);
-                entry.Reference(x => x.Author).Load();
-                entry.Reference(x => x.Post).Load();
-                var postEntry = _context.Entry(reply.Post);
-                postEntry.Reference(x => x.Author).Load();
-                postEntry.Reference(x => x.Topic).Load();
-            }
-            model.Source = source;
-            return View("New", model);
-        }
-
-        [HttpPost]
-        public IActionResult NewReply(NewViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                Message source = _context.Messages.Find(model.SourceId);
-                if (source is Reply)
-                {
-                    _context.Entry((Reply)source).Reference(x => x.Post).Load();
-                }
-                Reply reply = new();
-                reply.AuthorId = 2;
-                reply.Post = source is Post ? (Post)source : ((Reply)source).Post;
-                reply.Source = source is Reply ? (Reply)source : null;
-                reply.Text = model.Text;
-                _context.Add(reply);
-                _context.SaveChanges();
-                return RedirectToAction("Post", new { id = reply.Post.Id });
-            }
-            else
-            {
-                return View("New", model);
-            }
-        }
-
-        public IActionResult Author(int id)
-        {
-            AuthorViewModel model = new();
-            model.Author = _context.Users.Find(id);
             return View(model);
         }
 

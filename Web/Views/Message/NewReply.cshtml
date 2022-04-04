@@ -1,0 +1,42 @@
+﻿@model NewReplyViewModel
+@{
+    ViewBag.Title = "New reply";
+    ViewBag.NewView = true;
+    ViewBag.PostView = false;
+    ViewBag.TopicsView = false;
+}
+
+<div class="post">
+    @* original post *@
+    @{
+        ViewBag.Message = Model.Post;
+    }
+    <partial name="_Message" view-data="ViewData"/>
+
+    <div class="post-footer">
+        @* original reply *@
+        @if (Model.Reply is not null)
+        {
+            ViewBag.Message = Model.Reply;
+            <div class="reply mb-1" >
+                <partial name="_Message" view-data="ViewData"/>
+            </div>
+        }
+
+        <form asp-action="NewReply" method="post">
+            <div class="reply mb-1" style=@(Model.Reply is null? "" : "margin-left:8px")>
+                    <input type="hidden" asp-for="SourceId" value="@Model.SourceId"/>
+
+                    <div class="msg-body">
+                        <textarea class="form-control" asp-for="Text" rows="7" placeholder="Your reply"></textarea>
+                        <span class="form-label text-danger" asp-validation-for="Text"></span>
+                    </div>
+                        
+                    <div class="msg-label">
+                        <input class="btn text-large" type="submit" value="Post" />
+                        <a class="btn text-large ms-2" asp-action="Post" asp-route-id="@Model.Post.Id">Cancel</a>
+                    </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -102,8 +102,16 @@
 
 .link-icon:hover, .link-icon:focus,
 .a-muted:hover, .a-muted:focus {
-    color: var(--bs-light) !important;
+    color: var(--bs-primary) !important;
     cursor: pointer;
+}
+
+.rated {
+    color: #b29758 !important;
+}
+
+.link-icon.rated:hover, .link-icon.rated:focus {
+    color: #9fa8af !important;
 }
 
 /*.small > .a-muted:hover, .small > .a-muted:focus*//*,
