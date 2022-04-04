@@ -1,0 +1,7 @@
+﻿@model RatingPaneViewModel
+
+<div class="d-inline-flex align-items-center">
+    <span class="@(Model.Rate > 0 ? "rated" : "") link-icon fa-solid fa-thumbs-up" data-user-id=@Model.UserId data-msg-id=@Model.Message.Id data-rate="1"></span>
+    <span class="mx-1">@Model.Message.RateSum</span>
+    <span class="@(Model.Rate < 0 ? "rated" : "") link-icon fa-solid fa-thumbs-down" data-user-id="@Model.UserId" data-msg-id=@Model.Message.Id data-rate="-1"></span>
+</div>
