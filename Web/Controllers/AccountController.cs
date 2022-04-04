@@ -28,30 +28,63 @@ namespace Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = _context.Users.FirstOrDefault(x => x.Name == model.Username);
-                
-                if (user is not null)
+
+                model.UserNotFound = user is null;
+                if (!model.UserNotFound)
                 {
-                    if (user.Password == model.Password)
+                    model.WrongPassword = user.Password != model.Password;
+                    if (!model.WrongPassword)
                     {
                         HttpContext.Session.SetObject("User", user);
                         return RedirectToAction("Topics", "Message");
                     }
-                    else
+                }
+            }
+            return View(model);
+        }
+
+        public IActionResult ForumSignOut()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Topics", "Message");
+        }
+
+        public IActionResult Register()
+        {
+            return View(new RegisterViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.NameNotUnique = _context.Users.Any(x => x.Name == model.Username);
+                if (!model.NameNotUnique)
+                {
+                    model.EmailNotUnique = _context.Users.Any(x => x.EmailAddress == model.Email);
+                    if (!model.EmailNotUnique)
                     {
-                        model.WrongPassword = true;
-                        return View(model);
+                        User user = new();
+                        user.Name = model.Username;
+                        user.Password = model.Password;
+                        user.EmailAddress = model.Email;
+
+                        _context.Users.Add(user);
+                        _context.SaveChanges();
+
+                        HttpContext.Session.SetObject("User", user);
+
+                        return RedirectToAction("Topics", "Message");
                     }
                 }
-                else
-                {
-                    model.UserNotFound = true;
-                    return View(model);
-                }
             }
-            else
-            {
-                return View(model);
-            }
+            return View(model);
+        }
+
+        public IActionResult Profile(int id)
+        {
+            return View();
         }
     }
 }
