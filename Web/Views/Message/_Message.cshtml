@@ -1,23 +1,63 @@
-﻿@using Data.Entities
-@{
-    // message is not enveloped by post/reply div here
-    // to allow extending post with post-footer for replies in post view
+﻿@*
+    message is not enveloped by post/reply div here
+    to allow extending post with post-footer for replies in post view
+*@
 
+@using Data.Entities
+@{
     Message message = ViewBag.Message;
 }
 
+@* message header *@
 @if (message is Post)
 {
+    var post = (Post)message;
+
     // post header
-    ViewBag.Post = (Post)message;
-    <partial name="_PostHeader" view-data="ViewData"/>
+    <div class="msg-label d-flex align-items-end">
+        <h4 class="mb-1">
+            @* post title *@
+            @if (!ViewBag.PostView)
+            {
+                // link
+                <a class="a-muted" asp-action="Post" asp-route-id="@post.Id">@*
+                    *@@post.Title@*
+                *@</a>
+            }
+            else
+            {
+                //no link
+                @post.Title
+            }
+
+            @* link to author profile *@
+            <span class="small">
+                by
+                <a class="a-muted" asp-controller="Account" asp-action="Profile" asp-route-id="@post.AuthorId">
+                    @post.Author.Name
+                </a>
+            </span>
+        </h4>
+    
+        @* topic button *@
+        @if (ViewBag.PostView || ViewBag.NewView)
+        {
+            <h5 class="ms-auto mb-1">
+                <a class="link-icon" asp-action="Topic" asp-route-id="@post.TopicId">
+                    <span>@post.Topic.Name</span>
+                    <span class="fa-solid fa-angle-double-up"></span>
+                </a>
+            </h5>
+        }
+    </div>
 }
 else
 {
     // reply header
     <div class="msg-label d-flex align-items-end">
         <h6 class="mb-0">
-            <a class="a-muted" asp-action="Author" asp-route-id="@message.AuthorId">
+            @* link to author profile *@
+            <a class="a-muted" asp-controller = "" asp-action="Author" asp-route-id="@message.AuthorId">
                 @message.Author.Name
             </a>
         </h6>
@@ -30,4 +70,24 @@ else
 </div>
 
 @* message footer *@
-<partial name="_MessageFooter" view-data="ViewData"/>
+<div class="msg-label d-flex align-items-end">
+    @* rating pane *@
+    @await Component.InvokeAsync("RatingPane", message)
+
+    <div class="ms-auto d-flex align-items-end">
+        @* reply count *@
+        @if (message is Post)
+        {
+            var post = (Post)message;
+            <span>@post.Replies.Count replies</span>
+        }
+
+        @* reply button *@
+        @if ( ViewBag.PostView )
+        {
+            <a class="a-muted" asp-action="NewReply" asp-route-id="@message.Id">
+                <span class="link-icon fa-solid fa-message text-large ms-2"></span>
+            </a>
+        }
+    </div>
+</div>
