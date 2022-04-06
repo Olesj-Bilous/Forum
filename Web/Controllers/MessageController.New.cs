@@ -70,6 +70,7 @@ namespace Web.Controllers
                 var postEntry = _context.Entry(reply.Post);
                 postEntry.Reference(x => x.Author).Load();
                 postEntry.Reference(x => x.Topic).Load();
+                postEntry.Collection(x => x.Replies).Load();
 
                 model.Post = reply.Post;
                 model.Reply = reply;
