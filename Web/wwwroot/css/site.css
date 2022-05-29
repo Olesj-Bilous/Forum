@@ -17,6 +17,15 @@
     font-size: large;
 }
 
+.sub-span {
+    position: relative;
+    top: -0.5rem;
+}
+
+.sub-star {
+    margin-top: -0.2rem;
+}
+
 
 /*relative padding/margin*/
 .topic, main > .post, .form-pane {
@@ -81,7 +90,15 @@
     }
 }
 
-/*links*/
+/* buttons, links et varia */
+.small {
+    color: #787878;
+}
+
+.brand-icon {
+    color: #597696;
+}
+
 .btn {
     background-color: var(--bs-secondary);
     color: var(--bs-color);
@@ -91,18 +108,27 @@
     background-color: var(--bs-primary);
 }
 
-.a-muted, .link-icon {
+.link-icon {
+    display: inline-flex;
+    align-items: center;
     text-decoration: none;
-    color: var(--bs-dark);
+    color: inherit;
 }
 
-.small {
-    color: #787878;
+.a-muted {
+    display: inline-flex;
+    align-items: end;
+    text-decoration: none;
+    color: inherit;
 }
 
-.link-icon:hover, .link-icon:focus,
+.link-icon:hover, .link-icon:focus {
+    color: #a3a3a3 !important;
+    cursor: pointer;
+}
+
 .a-muted:hover, .a-muted:focus {
-    color: var(--bs-primary) !important;
+    color: #a3a3a3 !important;
     cursor: pointer;
 }
 
@@ -149,8 +175,12 @@ h5 > .a-muted*/ /*{
     padding: 0.3em 0.7em;
 }
 
-.topic-body, .msg-body, .post-footer {
+.topic-body, .post-footer, .reply > .msg-body {
     padding: 0.2em 0.7em;
+}
+
+.msg-body {
+    padding: 0.2em 1.2em;
 }
 
 .post-footer {

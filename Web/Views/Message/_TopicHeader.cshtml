@@ -2,8 +2,13 @@
     var topic = ViewBag.Topic;
 }
 
-<div class="topic-label d-flex align-items-end">
-    <h3 class="mb-1">
+<div class="topic-label d-flex align-items-top justify-content-between">
+    <span class="sub-span fa-stack">
+        <i class="fa-solid fa-bookmark fa-stack-2x"></i>
+        <i class="sub-star fa-solid fa-star text-black fa-stack-1x"></i>
+    </span>
+
+    <h3 class="text-center mb-1">
         @if (ViewBag.TopicsView || ViewBag.NewView)
         {
             <a class="a-muted" asp-action="Topic" asp-route-id="@topic.Id">@topic.Name</a>
@@ -13,13 +18,12 @@
             @topic.Name;
         }
 
-
-        <span class="small">
+        <span class="small d-block">
             @topic.Description
         </span>
     </h3>
 
-    <div class="ms-auto text-x-large">
+    <div class="text-x-large px-1">
         @if (!ViewBag.NewView)
         {
             <a class="a-muted" asp-action="NewPost" asp-route-id="@topic.Id">

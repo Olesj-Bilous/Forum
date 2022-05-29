@@ -44,8 +44,8 @@
         {
             <h5 class="ms-auto mb-1">
                 <a class="link-icon" asp-action="Topic" asp-route-id="@post.TopicId">
+                    <span class="fa-solid fa-lightbulb me-2"></span>
                     <span>@post.Topic.Name</span>
-                    <span class="fa-solid fa-angle-double-up"></span>
                 </a>
             </h5>
         }
@@ -75,19 +75,32 @@ else
     @await Component.InvokeAsync("RatingPane", message)
 
     <div class="ms-auto d-flex align-items-end">
+        @* reply button *@
+        @if ( ViewBag.PostView )
+        {
+            <a class="link-icon" asp-action="NewReply" asp-route-id="@message.Id">
+                <span class="fa-solid fa-comment text-large mx-2"></span>
+                <span>Reply</span>
+            </a>
+        }
+
         @* reply count *@
         @if (message is Post)
         {
             var post = (Post)message;
-            <span>@post.Replies.Count replies</span>
-        }
-
-        @* reply button *@
-        @if ( ViewBag.PostView )
-        {
-            <a class="a-muted" asp-action="NewReply" asp-route-id="@message.Id">
-                <span class="link-icon fa-solid fa-message text-large ms-2"></span>
-            </a>
+            if (ViewBag.PostView)
+            {
+                <div class="vr ms-2"></div>
+                <span class="ms-2">
+                    @post.Replies.Count replies
+                </span>
+            }
+            else
+            {
+                <a class="a-muted" asp-action="Post" asp-route-id="@post.Id">
+                    @post.Replies.Count replies
+                </a>
+            }
         }
     </div>
 </div>
